@@ -4,21 +4,14 @@ import classe_bolas
 
 def main():
     pygame.init()
-    tela = pygame.display.set_mode([1100, 680])
+    tela = pygame.display.set_mode([950, 587])
     pygame.display.set_caption("Soccer Game Escape")
     relogio = pygame.time.Clock()
-    cor_branca = (255, 255, 255)
-
-    #boliche = pygame.image.load("bola_boliche.jpg")
-
-    '''boliche = [0,0]
-
-    for i in range(2):
-        boliche[i] = pygame.image.load("bola_boliche.jpg")'''
-
-    #bolas = [boliche,futebol,volei]
     
-
+    cor_branca = (255, 255, 255)
+    
+    cont = 0
+    
     def encerrar():
         pygame.quit()
 
@@ -31,6 +24,12 @@ def main():
                     if event.key == pygame.K_ESCAPE:
                         encerrar()
                     return
+
+    def jogadorAcertouUmaBola(retJogador, bolas):
+        for b in bolas:
+            if retJogador.colliderect():
+                return True
+        return False
 
 
     def desenharTexto(text, font, surface, x, y):
@@ -61,7 +60,7 @@ def main():
             if event.type == pygame.QUIT:
                 sair = True
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
+            '''if event.type == pygame.MOUSEBUTTONDOWN:
                 retJogador = retJogador.move(10,10)
 
             if event.type == pygame.MOUSEMOTION:
@@ -79,63 +78,45 @@ def main():
                     retJogador.move_ip(0,-10)
                     
                 if event.key == ord('s'):
-                    retJogador.move_ip(0,10)        
+                    retJogador.move_ip(0,10)'''      
 
-        '''cont_bolas = 0
-        
-        if cont_bolas < 15:
-            aleatorio = random.randint(0,15)
-            for i in range(aleatorio):
-                ale = random.randint(0,49)
-                tela.blit(classe_bolas.bolas[ale].img, (classe_bolas.bolas[ale].x, classe_bolas.bolas[ale].y))
-                classe_bolas.bolas[ale].y += 5
-                cont_bolas += 1
-            if classe_bolas.bolas[ale].y > 690:
-                cont_bolas -= 1
-                print("caralho")'''
+                
+        for bola in range(len(classe_bolas.bolas)):
+            tela.blit(classe_bolas.bolas[bola].img, (classe_bolas.bolas[bola].x, classe_bolas.bolas[bola].y))
+            classe_bolas.bolas[bola].y += 5
 
-        todas_bolas = []
-        
-        cont_bolas = 0
+            if classe_bolas.bolas[bola].y > 620:
+                classe_bolas.bolas[bola].y = -18000
+                cont += 1
 
-        while cont_bolas < 15:
-            ale = random.randint(0,49)
-            bola = [classe_bolas.bolas[ale].img, (classe_bolas.bolas[ale].x, classe_bolas.bolas[ale].y)]
-            todas_bolas.append(bola)
-            cont_bolas += 1
+            pos = pygame.mouse.get_pos()
 
-        for bola in todas_bolas:
-            tela.blit(bola[0],bola[1])
+            if pos[0] == (classe_bolas.bolas[bola].x + 15) and pos[1] == (classe_bolas.bolas[bola].y+15):
+                sair = True
+                break
+                
 
-        
-            
+                                    
         pygame.display.update()               
         
         tela.blit(imagem_fundo, (0, 0))
-        
-        
+               
         (retJogador.left, retJogador.top) = pygame.mouse.get_pos()
 
         pos = pygame.mouse.get_pos()
         
         
-        if pos[0] > 1050:
-            pygame.mouse.set_pos(1050,pos[1])
+        if pos[0] > 900:
+            pygame.mouse.set_pos(900,pos[1])
             
-
-        elif pos[1] > 610:
-            pygame.mouse.set_pos(pos[0],610)
-            
-        
+        elif pos[1] > 540:
+            pygame.mouse.set_pos(pos[0],540)
+                    
         pygame.mouse.set_visible(0)
         
+        tela.blit(imagemJogador, retJogador)       
 
-        tela.blit(imagemJogador, retJogador)
-        
-        #pygame.display.update()
-        
-
-        relogio.tick(40)
+        relogio.tick(60)
         
     pygame.quit()
     
