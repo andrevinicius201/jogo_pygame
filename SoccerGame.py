@@ -6,14 +6,12 @@ def main():
     pygame.init()
     tela = pygame.display.set_mode([950, 587])
     pygame.display.set_caption("Soccer Game Escape")
-    relogio = pygame.time.Clock()
-    
-    cor_branca = (255, 255, 255)
-    
-    cont = 0
+    relogio = pygame.time.Clock()    
+    cor_branca = (255, 255, 255)        
     
     def encerrar():
         pygame.quit()
+        sys.exit()
 
     def apertarAlgumaTecla():
         while True:
@@ -23,28 +21,29 @@ def main():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         encerrar()
-                    return
-
-    def jogadorAcertouUmaBola(retJogador, bolas):
-        for b in bolas:
-            if retJogador.colliderect():
-                return True
-        return False
-
-
+                    sair1 = False
+                    return sair1
+                if event.type == pygame.MOUSEBUTTONUP:
+                    sair1 = False
+                    return sair1 
+            
+                
     def desenharTexto(text, font, surface, x, y):
         textobj = font.render(text, 1, cor_branca)
         textrect = textobj.get_rect()
         textrect.topleft = (x, y)
         surface.blit(textobj, textrect)
 
-
     pygame.font.init()
 
-    font = pygame.font.SysFont(None, 48)
+    font = pygame.font.SysFont("comicsansms", 40)
 
-    desenharTexto('Soccer Game Escape', font, tela, 400, 225)
-    desenharTexto('Press a key to start.', font, tela, 400 - 30, 225 + 50)
+    imagem_inicio = pygame.image.load("img_inicio.jpg")
+    imagem_final = pygame.image.load("img_final.jpg")
+
+    tela.blit(imagem_inicio,(0,0))
+    desenharTexto('Soccer Game Escape', font, tela, 310, 225)
+    desenharTexto('Pressione alguma tecla para começar', font, tela, 150, 275)
     pygame.display.update()
     apertarAlgumaTecla()
 
@@ -52,75 +51,76 @@ def main():
 
     imagemJogador = pygame.image.load("messi.jpg")
     retJogador = imagemJogador.get_rect()
-    
+
+    topScore = 0
     sair = False
-
+    
     while sair != True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sair = True
+        score = 0
+        
+        sair1 = False
 
-            '''if event.type == pygame.MOUSEBUTTONDOWN:
-                retJogador = retJogador.move(10,10)
-
-            if event.type == pygame.MOUSEMOTION:
-                retJogador = retJogador.move(-1,-1)
+        classe_bolas.bolas = []
+        classe_bolas.iniciar_bolas()
+        pygame.mouse.set_pos(500,500)
+        
+        while sair1 != True:
+            tela.blit(imagem_fundo, (0, 0))
+            tela.blit(imagemJogador, retJogador)
             
-            if event.type == pygame.KEYDOWN:
-                if event.key == ord('a'):
-                    retJogador = (retJogador[0]+10, retJogador[1], retJogador[2], retJogador[3])
-                    print("de boas")
-                    
-                if event.key == ord('d'):
-                    retJogador.move_ip(10,0)
-                    
-                if event.key == ord('w'):
-                    retJogador.move_ip(0,-10)
-                    
-                if event.key == ord('s'):
-                    retJogador.move_ip(0,10)'''      
+            desenharTexto('Score: %s' % (score), font, tela, 10, 0)
+            desenharTexto('Top Score: %s' % (topScore), font, tela, 10, 40)
 
-                
-        for bola in range(len(classe_bolas.bolas)):
-            tela.blit(classe_bolas.bolas[bola].img, (classe_bolas.bolas[bola].x, classe_bolas.bolas[bola].y))
-            classe_bolas.bolas[bola].y += 5
+            (retJogador.left, retJogador.top) = pygame.mouse.get_pos()
 
-            if classe_bolas.bolas[bola].y > 620:
-                classe_bolas.bolas[bola].y = -18000
-                cont += 1
-
-            pos = pygame.mouse.get_pos()
-
-            if pos[0] == (classe_bolas.bolas[bola].x + 15) and pos[1] == (classe_bolas.bolas[bola].y+15):
-                sair = True
-                break
-                
-
-                                    
-        pygame.display.update()               
-        
-        tela.blit(imagem_fundo, (0, 0))
-               
-        (retJogador.left, retJogador.top) = pygame.mouse.get_pos()
-
-        pos = pygame.mouse.get_pos()
-        
-        
-        if pos[0] > 900:
-            pygame.mouse.set_pos(900,pos[1])
+            position = pygame.mouse.get_pos()
             
-        elif pos[1] > 540:
-            pygame.mouse.set_pos(pos[0],540)
-                    
-        pygame.mouse.set_visible(0)
-        
-        tela.blit(imagemJogador, retJogador)       
+            if position[0] > 900:
+                pygame.mouse.set_pos(900,position[1])
+                
+            elif position[1] > 540:
+                pygame.mouse.set_pos(position[0],540)
+                        
+            pygame.mouse.set_visible(0)
 
-        relogio.tick(60)
-        
-    pygame.quit()
-    
-    
+            for b in classe_bolas.bolas:
+                tela.blit(b.img, b.rect)
+
+            pygame.display.update()
+                                                               
+            for b in classe_bolas.bolas:
+                b.rect.move_ip(0,b.vel)
+
+            for b in classe_bolas.bolas[:]:
+                if b.rect.top > 600:
+                    classe_bolas.bolas.remove(b)
+                    classe_bolas.bolas.append(classe_bolas.Bola(random.randint(0, 930), random.randint(-1800, 0), random.randint(0, len(classe_bolas.imagens)-1), random.randint(3, 8)))
+            
+            for b in classe_bolas.bolas:
+                if retJogador.colliderect(b.rect):
+                    if b.tipo == 'futebol':
+                        score += 1
+                        classe_bolas.bolas.remove(b)
+                        classe_bolas.bolas.append(classe_bolas.Bola(random.randint(0, 930), random.randint(-1800, 0), random.randint(0, len(classe_bolas.imagens)-1), random.randint(3, 8)))
+                    elif b.tipo != 'futebol':
+                        if score > topScore :
+                            topScore = score
+                        sair1 = True
+                        
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sair1 = True                   
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:                        
+                        sair1 = True 
+                        
+            relogio.tick(60)
+       
+        tela.blit(imagem_final, (0,0))
+        desenharTexto('GAME OVER', font, tela, 380, 60)
+        desenharTexto('Pressione uma tecla para jogar novamente', font, tela, 100, 110)
+        pygame.display.update()        
+        apertarAlgumaTecla()
 
 main()
     

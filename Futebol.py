@@ -28,8 +28,6 @@ def apertarAlgumaTecla():
 
 def jogadorAcertouUmaBola(retJogador, bolas):
     for b in bolas:
-        if b['img'] == '<Surface(30x32x32 SW)>':
-            print("beleza")
         if retJogador.colliderect(b['rect']):
             return True
     return False
