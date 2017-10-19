@@ -14,6 +14,6 @@ class Bola:
         self.vel = vel
 
 def iniciar_bolas():        
-    for i in range(100):
+    for i in range(50):
         bolas.append(Bola(random.randint(0, 930), random.randint(-1800, 0), random.randint(0, len(imagens)-1), random.randint(3, 8)))
 
