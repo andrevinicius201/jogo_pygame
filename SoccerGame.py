@@ -37,6 +37,7 @@ def main():
     pygame.font.init()
 
     font = pygame.font.SysFont("comicsansms", 40)
+    fonte = pygame.font.SysFont("times", 36)
 
     imagem_inicio = pygame.image.load("img_inicio.jpg")
     imagem_final = pygame.image.load("img_final.jpg")
@@ -44,6 +45,7 @@ def main():
     tela.blit(imagem_inicio,(0,0))
     desenharTexto('Soccer Game Escape', font, tela, 310, 225)
     desenharTexto('Pressione alguma tecla para começar', font, tela, 150, 275)
+    desenharTexto('Pegue apenas as bolas de futebol', fonte, tela, 150, 320)
     pygame.display.update()
     apertarAlgumaTecla()
 
