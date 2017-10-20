@@ -65,6 +65,8 @@ def main():
         classe_bolas.bolas = []
         classe_bolas.iniciar_bolas()
         pygame.mouse.set_pos(500,500)
+
+        dificuldade = 10
         
         while sair1 != True:
             tela.blit(imagem_fundo, (0, 0))
@@ -96,18 +98,24 @@ def main():
             for b in classe_bolas.bolas[:]:
                 if b.rect.top > 600:
                     classe_bolas.bolas.remove(b)
-                    classe_bolas.bolas.append(classe_bolas.Bola(random.randint(0, 930), random.randint(-1800, 0), random.randint(0, len(classe_bolas.imagens)-1), random.randint(3, 8)))
+                    classe_bolas.bolas.append(classe_bolas.Bola(random.randint(0, 930), random.randint(-1800, 0), random.randint(0, len(classe_bolas.imagens)-1), random.randint(3, 5)))
             
             for b in classe_bolas.bolas:
                 if retJogador.colliderect(b.rect):
                     if b.tipo == 'futebol':
                         score += 1
                         classe_bolas.bolas.remove(b)
-                        classe_bolas.bolas.append(classe_bolas.Bola(random.randint(0, 930), random.randint(-1800, 0), random.randint(0, len(classe_bolas.imagens)-1), random.randint(3, 8)))
+                        classe_bolas.bolas.append(classe_bolas.Bola(random.randint(0, 930), random.randint(-1800, 0), random.randint(0, len(classe_bolas.imagens)-1), random.randint(3, 5)))
                     elif b.tipo != 'futebol':
                         if score > topScore :
                             topScore = score
+                        classe_bolas.quant = 50
                         sair1 = True
+
+            if score == dificuldade:
+                dificuldade += 10
+                for i in range(5):
+                    classe_bolas.bolas.append(classe_bolas.Bola(random.randint(0, 930), random.randint(-1800, 0), random.randint(0, len(classe_bolas.imagens)-1), random.randint(3, 5))) 
                         
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -123,7 +131,7 @@ def main():
         desenharTexto('Pressione uma tecla para jogar novamente', font, tela, 100, 110)
         pygame.display.update()        
         apertarAlgumaTecla()
-
+    
 main()
     
 
