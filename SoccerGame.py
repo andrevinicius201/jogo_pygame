@@ -1,13 +1,15 @@
 import pygame, sys
 import random
 import classe_bolas
+import time
 
 def main():
     pygame.init()
     tela = pygame.display.set_mode([950, 587])
     pygame.display.set_caption("Soccer Game Escape")
     relogio = pygame.time.Clock()    
-    cor_branca = (255, 255, 255)        
+    cor_branca = (255, 255, 255)
+        
     
     def encerrar():
         pygame.quit()
@@ -45,7 +47,9 @@ def main():
     tela.blit(imagem_inicio,(0,0))
     desenharTexto('Soccer Game Escape', font, tela, 310, 225)
     desenharTexto('Pressione alguma tecla para começar', font, tela, 150, 275)
-    desenharTexto('Pegue apenas as bolas de futebol', fonte, tela, 150, 320)
+    desenharTexto('Pegue apenas as bolas de futebol. ', fonte, tela, 150, 320)
+    desenharTexto('Caso precise pausar o jogo a ', fonte, tela, 150,350)
+    desenharTexto('qualquer momento, pressione P', fonte, tela, 150,400)
     pygame.display.update()
     apertarAlgumaTecla()
 
@@ -56,8 +60,10 @@ def main():
 
     topScore = 0
     sair = False
-    
+    contador = 0
     while sair != True:
+        contador += 1
+        print(contador)
         score = 0
         
         sair1 = False
@@ -122,8 +128,11 @@ def main():
                     sair1 = True                   
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:                        
-                        sair1 = True 
-                        
+                        sair1 = True
+                    elif event.key == pygame.K_p:
+                        relogio.tick(1000000000000)
+
+            
             relogio.tick(60)
        
         tela.blit(imagem_final, (0,0))

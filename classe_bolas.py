@@ -2,8 +2,8 @@ import random
 import pygame
 
 
-imagens = ['bola_boliche.jpg','bola_futebol.jpg','bola_volei.jpg','bola_footbal.jpg','bola_basquete.jpg','bola_baseball.jpg','bola_tenis.jpg']
-tipos = ['boliche','futebol', 'volei','footbal','basquete','baseball','tenis']
+imagens = ['bola_boliche.jpg','bola_futebol.jpg','bola_volei.jpg','bola_footbal.jpg','bola_basquete.jpg','bola_baseball.jpg','bola_tenis.jpg',"gold.png"]
+tipos = ['boliche','futebol', 'volei','footbal','basquete','baseball','tenis','dourada']
 bolas = []
 
 class Bola:
