@@ -58,7 +58,7 @@ def main():
     ranking = []
     
     cont_rank = 1
-    topScore = 0
+    #topScore = 0
     sair = False
     
     while sair != True:
@@ -82,7 +82,7 @@ def main():
             
             
             desenharTexto('Score: %s' % (score), font, tela, 10, 0)
-            desenharTexto('Top Score: %s' % (topScore), font, tela, 10, 40)
+            desenharTexto("Jogador"+str(jogador), font, tela, 10, 40)
 
             (retJogador.left, retJogador.top) = pygame.mouse.get_pos()
 
@@ -121,8 +121,6 @@ def main():
                         classe_bolas.bolas.append(classe_bolas.Bola(random.randint(0, 930), random.randint(-1800, 0), random.randint(0, len(classe_bolas.imagens)-1), random.randint(3, 5)))
                         
                     elif b.tipo != 'futebol' and b.tipo != 'dourada':
-                        if score > topScore :
-                            topScore = score
                         classe_bolas.quant = 50
                         ranking.append(["Jogador"+str(jogador),score])
                         sair1 = True
@@ -146,6 +144,7 @@ def main():
         tela.blit(imagem_final, (0,0))
         desenharTexto('GAME OVER', font, tela, 380, 30)
         desenharTexto('Pressione uma tecla para jogar novamente', font, tela, 100, 80)
+        desenharTexto('Jogador'+str(jogador)+"  -  "+str(score)+" pontos", font, tela, 100, 125)
 
         for r in range(len(ranking)):
             p1 = ranking[r][1]
@@ -156,13 +155,13 @@ def main():
                     ranking[r] = ranking[j]
                     ranking[j] = aux
 
-        desenharTexto('RANKING:', font, tela, 100, 140)
+        desenharTexto('RANKING:', font, tela, 100, 190)
 
-        yranking = 180
+        yranking = 230
 
         for r in range(len(ranking)):
             if cont_rank <= 5:                
-                desenharTexto(str(cont_rank)+"º "+ ranking[r][0] + "  " + str(ranking[r][1]) + " pontos", font, tela, 100, yranking)
+                desenharTexto(str(cont_rank)+"º - "+ ranking[r][0] + "  : " + str(ranking[r][1]) + " pontos", font, tela, 100, yranking)
                 yranking += 40
                 cont_rank += 1
                     
