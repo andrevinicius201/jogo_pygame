@@ -27,9 +27,8 @@ def main():
                     return sair1
                 if event.type == pygame.MOUSEBUTTONUP:
                     sair1 = False
-                    return sair1 
-            
-                
+                    return sair1
+                          
     def desenharTexto(text, font, surface, x, y):
         textobj = font.render(text, 1, cor_branca)
         textrect = textobj.get_rect()
@@ -48,8 +47,6 @@ def main():
     desenharTexto('Soccer Game Escape', font, tela, 310, 200)
     desenharTexto('Pressione alguma tecla para começar', font, tela, 150, 275)
     desenharTexto('Pegue apenas as bolas de futebol. ', fonte, tela, 150, 320)
-    desenharTexto('Caso precise pausar o jogo a ', fonte, tela, 150,350)
-    desenharTexto('qualquer momento, pressione P', fonte, tela, 150,400)
     pygame.display.update()
     apertarAlgumaTecla()
 
@@ -57,14 +54,16 @@ def main():
 
     imagemJogador = pygame.image.load("messi.jpg")
     retJogador = imagemJogador.get_rect()
-
     
-    pontuacoes = []
     ranking = []
+    
+    cont_rank = 1
     topScore = 0
     sair = False
     
     while sair != True:
+
+        cont_rank = 1
         
         score = 0
         
@@ -75,7 +74,7 @@ def main():
         
         pygame.mouse.set_pos(500,500)
 
-        dificuldade = 10
+        dificuldade = 5
         
         while sair1 != True:
             tela.blit(imagem_fundo, (0, 0))
@@ -125,10 +124,11 @@ def main():
                         if score > topScore :
                             topScore = score
                         classe_bolas.quant = 50
+                        ranking.append(["Jogador"+str(jogador),score])
                         sair1 = True
 
             if score == dificuldade:
-                dificuldade += 10
+                dificuldade += 5
                 for i in range(5):
                     classe_bolas.bolas.append(classe_bolas.Bola(random.randint(0, 930), random.randint(-1800, 0), random.randint(0, len(classe_bolas.imagens)-1), random.randint(3, 5))) 
                         
@@ -136,30 +136,36 @@ def main():
                 if event.type == pygame.QUIT:
                     sair1 = True                   
                 if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:                        
+                    if event.key == pygame.K_ESCAPE:
+                        ranking.append(["Jogador"+str(jogador),score])
+                        
                         sair1 = True
-                    elif event.key == pygame.K_p:
-                        relogio.tick(1000000000000)
                 
             relogio.tick(60)
-        ranking.append(score)
-        pontuacoes.append(score)
+            
         tela.blit(imagem_final, (0,0))
         desenharTexto('GAME OVER', font, tela, 380, 30)
         desenharTexto('Pressione uma tecla para jogar novamente', font, tela, 100, 80)
-        desenharTexto('Pontuação do jogador Jogador %s' % (jogador), font, tela, 100, 120)
-        desenharTexto(': %s' % (score), font, tela, 700, 120)
-        pos_y = 140
-        ranking.reverse()
-        if len(ranking) <= 5:
-            for i in ranking:
-                pos_y += 35    
-                desenharTexto(': %s' % (i), font, tela, 500, pos_y)
-        else:
-            for i in range(len(5)):
-                pos_y += 35
-                desenharTexto(': %s' % (ranking), font, tela, 500, pos_y)
-            
+
+        for r in range(len(ranking)):
+            p1 = ranking[r][1]
+            for j in range(r+1, len(ranking)):
+                p2 = ranking[j][1]
+                if p2 > p1:
+                    aux = ranking[r]
+                    ranking[r] = ranking[j]
+                    ranking[j] = aux
+
+        desenharTexto('RANKING:', font, tela, 100, 140)
+
+        yranking = 180
+
+        for r in range(len(ranking)):
+            if cont_rank <= 5:                
+                desenharTexto(str(cont_rank)+"º "+ ranking[r][0] + "  " + str(ranking[r][1]) + " pontos", font, tela, 100, yranking)
+                yranking += 40
+                cont_rank += 1
+                    
         jogador += 1
         
         pygame.display.update()        
